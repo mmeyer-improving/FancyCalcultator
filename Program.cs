@@ -54,7 +54,7 @@ namespace FancyCalculator
                     Divide(x, y);
                     break;
                 default:
-                    Console.WriteLine("Incorrect format.");
+                    Console.WriteLine($"The operation '{inputPieces.ElementAt(1)}' is invalid. You must use one of the following: + - * /");
                     return;
             }
         }
