@@ -133,7 +133,6 @@ namespace FancyCalculator
                     Console.WriteLine($" {equation}");
                 }
             }
-            
         }
         
         //Adds the two decimals together.
@@ -141,7 +140,7 @@ namespace FancyCalculator
         {
             var result = x + y;
             timeMachine.LastResult = result;
-            timeMachine.History.Add($"{input} = {result}");
+            timeMachine.AddHistory($"{input} = {result}");
             Console.WriteLine($"Result: {result}");
         }
 
@@ -150,7 +149,7 @@ namespace FancyCalculator
         {
             var result = x - y;
             timeMachine.LastResult = result;
-            timeMachine.History.Add($"{input} = {result}");
+            timeMachine.AddHistory($"{input} = {result}");
             Console.WriteLine($"Result: {result}");
         }
 
@@ -159,7 +158,7 @@ namespace FancyCalculator
         {
             var result = x * y;
             timeMachine.LastResult = result;
-            timeMachine.History.Add($"{input} = {result}");
+            timeMachine.AddHistory($"{input} = {result}");
             Console.WriteLine($"Result: {result}");
         }
 
@@ -173,7 +172,7 @@ namespace FancyCalculator
             }
             var result = x / y;
             timeMachine.LastResult = result;
-            timeMachine.History.Add($"{input} = {result}");
+            timeMachine.AddHistory($"{input} = {result}");
             Console.WriteLine($"Result: {result}");
         }
     }
