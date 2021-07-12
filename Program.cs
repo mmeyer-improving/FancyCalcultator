@@ -10,53 +10,61 @@ namespace FancyCalculator
         {
             decimal x;
             decimal y;
+            string input;
 
             Console.WriteLine("A Console Calculator");
 
-            Console.WriteLine("Enter what you would like to see added");
-            string input = Console.ReadLine();
-            List<string> inputPieces = input.Split(' ').ToList();
+            do
+            {
+                Console.WriteLine("Enter in the operation you would like to perform.");
+                input = Console.ReadLine();
 
-            //Validating first input
-            if (!ValidateNumber(inputPieces.ElementAt(0), "first"))
-            {
-                return;
-            } 
-            else
-            {
-                x = Decimal.Parse(inputPieces.ElementAt(0));
-            }
+                if (input == "exit") { return; }
 
-            //validating second input
-            if (!ValidateNumber(inputPieces.ElementAt(2), "second"))
-            {
-                return;
-            }
-            else
-            {
-                y = Decimal.Parse(inputPieces.ElementAt(2));
-            }
+                List<string> inputPieces = input.Split(' ').ToList();
 
-            
-            //switch statement looks at second part of equation and determines which equation to use.
-            switch (inputPieces.ElementAt(1))
-            {
-                case "+":
-                    Add(x, y);
-                    break;
-                case "-":
-                    Subtract(x, y);
-                    break;
-                case "*":
-                    Multiply(x, y);
-                    break;
-                case "/":
-                    Divide(x, y);
-                    break;
-                default:
-                    Console.WriteLine($"The operation '{inputPieces.ElementAt(1)}' is invalid. You must use one of the following: + - * /");
+                //Validating first input
+                if (!ValidateNumber(inputPieces.ElementAt(0), "first"))
+                {
                     return;
-            }
+                }
+                else
+                {
+                    x = Decimal.Parse(inputPieces.ElementAt(0));
+                }
+
+                //validating second input
+                if (!ValidateNumber(inputPieces.ElementAt(2), "second"))
+                {
+                    return;
+                }
+                else
+                {
+                    y = Decimal.Parse(inputPieces.ElementAt(2));
+                }
+
+
+                //switch statement looks at second part of equation and determines which equation to use.
+                switch (inputPieces.ElementAt(1))
+                {
+                    case "+":
+                        Add(x, y);
+                        break;
+                    case "-":
+                        Subtract(x, y);
+                        break;
+                    case "*":
+                        Multiply(x, y);
+                        break;
+                    case "/":
+                        Divide(x, y);
+                        break;
+                    default:
+                        Console.WriteLine($"The operation '{inputPieces.ElementAt(1)}' is invalid. You must use one of the following: + - * /");
+                        return;
+                }
+            } while (input != "exit");
+
         }
 
         //Validates whether the strng input passed in is a number or not.
