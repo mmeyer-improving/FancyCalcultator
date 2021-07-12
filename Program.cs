@@ -18,7 +18,7 @@ namespace FancyCalculator
             List<string> inputPieces = input.Split(' ').ToList();
 
             //Validating first input
-            if (!validateNumber(inputPieces.ElementAt(0), "first"))
+            if (!ValidateNumber(inputPieces.ElementAt(0), "first"))
             {
                 return;
             } 
@@ -28,7 +28,7 @@ namespace FancyCalculator
             }
 
             //validating second input
-            if (!validateNumber(inputPieces.ElementAt(2), "second"))
+            if (!ValidateNumber(inputPieces.ElementAt(2), "second"))
             {
                 return;
             }
@@ -37,13 +37,25 @@ namespace FancyCalculator
                 y = Decimal.Parse(inputPieces.ElementAt(2));
             }
 
-            decimal result = x + y;
-            Console.WriteLine($"Result: {result}");
+            
+            //switch statement looks at second part of equation and determines which equation to use.
+            switch (inputPieces.ElementAt(1))
+            {
+                case "+":
+                    Add(x, y);
+                    break;
+                case "-":
+                    Subtract(x, y);
+                    break;
+                default:
+                    Console.WriteLine("Incorrect format.");
+                    return;
+            }
         }
 
         //Validates whether the strng input passed in is a number or not.
         //If not, writes out that it is not a number and specifies the place in sequence, i.e. "the *second* value, ___, is not a number".
-        static bool validateNumber(string input, string placeInSequence)
+        static bool ValidateNumber(string input, string placeInSequence)
         {
             decimal number;
 
@@ -53,6 +65,20 @@ namespace FancyCalculator
                 return false;
             }
             return true;
+        }
+        
+        //Adds the two decimals together.
+        static void Add(decimal x, decimal y)
+        {
+            var result = x + y;
+            Console.WriteLine($"Result: {result}");
+        }
+
+        //Subtracts the two decimals.
+        static void Subtract(decimal x, decimal y)
+        {
+            var result = x - y;
+            Console.WriteLine($"Result: {result}");
         }
     }
 }
