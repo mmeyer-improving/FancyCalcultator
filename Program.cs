@@ -25,7 +25,7 @@ namespace FancyCalculator
 
                 //If they type in exit, stop loop
                 if (input == "exit") { return; }
-                else if (input == "history") { DisplayHistory(timeMachine); }
+                else if (input.Contains("history")) { DisplayHistory(input, timeMachine); }
                 else
                 {
                     //TODO could refactor lower stuff out into own method. Check to see if input pieces has 2, if so insert LastResult.ToString into first part.
@@ -120,7 +120,7 @@ namespace FancyCalculator
             return true;
         }
 
-        static void DisplayHistory(TimeMachine timeMachine)
+        static void DisplayHistory(string input, TimeMachine timeMachine)
         {
             if (!(timeMachine.History.Any()))
             {
@@ -128,23 +128,55 @@ namespace FancyCalculator
             } 
             else
             {
-                foreach (var equation in timeMachine.History)
-                {
-                    var equationPieces = equation.Split(' ');
+                var inputPieces = input.Split(' ');
+                string validOperands = "+ - * /";
 
-                    if (equationPieces.Length == 5)
+                if (inputPieces.Length == 2 && validOperands.Contains(inputPieces[1]))
+                {
+                    foreach (var equation in timeMachine.History)
                     {
-                        string firstPart = $"{equationPieces[0]} {equationPieces[1]} {equationPieces[2]}";
-                        string paddedFirstPart = firstPart.PadRight(timeMachine.LongestFirstPartLength);
-                        Console.WriteLine($" {paddedFirstPart} = {equationPieces[4]}");
-                    } 
-                    else
+                        var equationPieces = equation.Split(' ');
+
+                        if (equationPieces.Length == 5 && equationPieces[1] == inputPieces[1])
+                        {
+                            string firstPart = $"{equationPieces[0]} {equationPieces[1]} {equationPieces[2]}";
+                            string paddedFirstPart = firstPart.PadRight(timeMachine.LongestFirstPartLength);
+                            Console.WriteLine($" {paddedFirstPart} = {equationPieces[4]}");
+                        }
+                        else if (equationPieces.Length == 4 && equationPieces[0] == inputPieces[1])
+                        {
+                            string firstPart = $"{equationPieces[0]} {equationPieces[1]}";
+                            string paddedFirstPart = firstPart.PadRight(timeMachine.LongestFirstPartLength);
+                            Console.WriteLine($" {paddedFirstPart} = {equationPieces[3]}");
+                        }
+                    }
+                } 
+                else if (inputPieces.Length == 1)
+                {
+                    foreach (var equation in timeMachine.History)
                     {
-                        string firstPart = $"{equationPieces[0]} {equationPieces[1]}";
-                        string paddedFirstPart = firstPart.PadRight(timeMachine.LongestFirstPartLength);
-                        Console.WriteLine($" {paddedFirstPart} = {equationPieces[3]}");
+                        var equationPieces = equation.Split(' ');
+
+                        if (equationPieces.Length == 5)
+                        {
+                            string firstPart = $"{equationPieces[0]} {equationPieces[1]} {equationPieces[2]}";
+                            string paddedFirstPart = firstPart.PadRight(timeMachine.LongestFirstPartLength);
+                            Console.WriteLine($" {paddedFirstPart} = {equationPieces[4]}");
+                        }
+                        else
+                        {
+                            string firstPart = $"{equationPieces[0]} {equationPieces[1]}";
+                            string paddedFirstPart = firstPart.PadRight(timeMachine.LongestFirstPartLength);
+                            Console.WriteLine($" {paddedFirstPart} = {equationPieces[3]}");
+                        }
                     }
                 }
+                else
+                {
+                    Console.WriteLine("Incorrect formatting.");
+                    return;
+                }
+                
             }
         }
         
