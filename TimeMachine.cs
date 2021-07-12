@@ -9,5 +9,11 @@ namespace FancyCalculator
     class TimeMachine
     { 
         public decimal LastResult { get; set; }
+        public List<string> History { get; set; }
+
+        public TimeMachine()
+        {
+            History = new List<string>();
+        }
     }
 }
