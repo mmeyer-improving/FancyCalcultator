@@ -8,9 +8,12 @@ namespace FancyCalculator
     {
         static void Main(string[] args)
         {
+            TimeMachine timeMachine = new TimeMachine();
             decimal x;
+            string operand;
             decimal y;
             string input;
+            
 
             Console.WriteLine("A Console Calculator");
 
@@ -23,53 +26,79 @@ namespace FancyCalculator
                 //If they type in exit, stop loop
                 if (input == "exit") { return; }
 
-                //spitting input into multiple pieces, if there are not 3 then send an error message
+
+                //TODO could refactor lower stuff out into own method. Check to see if input pieces has 2, if so insert LastResult.ToString into first part.
+                //Then, if it doesn't have 3 pieces, spit out error message and return.
+                //Then, do normal validation for numbers one and two. Number one is essentially being evaluated and parse twice, once the first time and again as history but maybe that's okay.
+                //HOWEVER, if doing this what to return? if bool, need to parse stuff AGAIN anyway. if List<decimal>, no way to show Main they are invalid?
+
+                //Splitting input into multiple pieces, if there are not 2 or 3 then send an error message.
+                //Then, validate numbers and assign based on how many were provided.
                 List<string> inputPieces = input.Split(' ').ToList();
-                if (inputPieces.Count() != 3)
+                if (inputPieces.Count() == 3)
                 {
-                    Console.WriteLine("An operation must be in the form '5 + 8.' Please try again.");
-                    return;
-                }
+                    //Validating first input
+                    if (!ValidateNumber(inputPieces.ElementAt(0), "first"))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        x = Decimal.Parse(inputPieces.ElementAt(0));
+                    }
 
+                    operand = inputPieces.ElementAt(1);
 
-                //Validating first input
-                if (!ValidateNumber(inputPieces.ElementAt(0), "first"))
+                    //Validating second input
+                    if (!ValidateNumber(inputPieces.ElementAt(2), "second"))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        y = Decimal.Parse(inputPieces.ElementAt(2));
+                    }
+                } 
+                else if (inputPieces.Count == 2)
                 {
-                    return;
-                }
-                else
-                {
-                    x = Decimal.Parse(inputPieces.ElementAt(0));
-                }
+                    x = timeMachine.LastResult;
 
-                //validating second input
-                if (!ValidateNumber(inputPieces.ElementAt(2), "second"))
+                    operand = inputPieces.ElementAt(0);
+
+                    //Validating second input
+                    if (!ValidateNumber(inputPieces.ElementAt(1), "second"))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        y = Decimal.Parse(inputPieces.ElementAt(1));
+                    }
+                } 
+                else 
                 {
+                    Console.WriteLine("An operation must be in the form '5 + 8' or '+ 8' if continuing based on a previous value. Please try again.");
                     return;
-                }
-                else
-                {
-                    y = Decimal.Parse(inputPieces.ElementAt(2));
                 }
 
 
                 //switch statement looks at second part of equation and determines which equation to use.
-                switch (inputPieces.ElementAt(1))
+                switch (operand)
                 {
                     case "+":
-                        Add(x, y);
+                        Add(x, y, ref timeMachine);
                         break;
                     case "-":
-                        Subtract(x, y);
+                        Subtract(x, y, ref timeMachine);
                         break;
                     case "*":
-                        Multiply(x, y);
+                        Multiply(x, y, ref timeMachine);
                         break;
                     case "/":
-                        Divide(x, y);
+                        Divide(x, y, ref timeMachine);
                         break;
                     default:
-                        Console.WriteLine($"The operation '{inputPieces.ElementAt(1)}' is invalid. You must use one of the following: + - * /");
+                        Console.WriteLine($"The operation '{operand}' is invalid. You must use one of the following: + - * /");
                         return;
                 }
             } while (input != "exit");
@@ -91,30 +120,39 @@ namespace FancyCalculator
         }
         
         //Adds the two decimals together.
-        static void Add(decimal x, decimal y)
+        static void Add(decimal x, decimal y, ref TimeMachine timeMachine)
         {
             var result = x + y;
+            timeMachine.LastResult = result;
             Console.WriteLine($"Result: {result}");
         }
 
         //Subtracts the two decimals.
-        static void Subtract(decimal x, decimal y)
+        static void Subtract(decimal x, decimal y, ref TimeMachine timeMachine)
         {
             var result = x - y;
+            timeMachine.LastResult = result;
             Console.WriteLine($"Result: {result}");
         }
 
         //Multiplies the two decimals.
-        static void Multiply(decimal x, decimal y)
+        static void Multiply(decimal x, decimal y, ref TimeMachine timeMachine)
         {
             var result = x * y;
+            timeMachine.LastResult = result;
             Console.WriteLine($"Result: {result}");
         }
 
         //Divides the two decimals.
-        static void Divide(decimal x, decimal y)
+        static void Divide(decimal x, decimal y, ref TimeMachine timeMachine)
         {
+            if (y == 0)
+            {
+                Console.WriteLine("Cannot divide by 0");
+                return;
+            }
             var result = x / y;
+            timeMachine.LastResult = result;
             Console.WriteLine($"Result: {result}");
         }
     }
