@@ -16,12 +16,21 @@ namespace FancyCalculator
 
             do
             {
+                //Collecting input
                 Console.WriteLine("Enter in the operation you would like to perform.");
                 input = Console.ReadLine();
 
+                //If they type in exit, stop loop
                 if (input == "exit") { return; }
 
+                //spitting input into multiple pieces, if there are not 3 then send an error message
                 List<string> inputPieces = input.Split(' ').ToList();
+                if (inputPieces.Count() != 3)
+                {
+                    Console.WriteLine("An operation must be in the form '5 + 8.' Please try again.");
+                    return;
+                }
+
 
                 //Validating first input
                 if (!ValidateNumber(inputPieces.ElementAt(0), "first"))
