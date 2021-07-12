@@ -130,7 +130,20 @@ namespace FancyCalculator
             {
                 foreach (var equation in timeMachine.History)
                 {
-                    Console.WriteLine($" {equation}");
+                    var equationPieces = equation.Split(' ');
+
+                    if (equationPieces.Length == 5)
+                    {
+                        string firstPart = $"{equationPieces[0]} {equationPieces[1]} {equationPieces[2]}";
+                        string paddedFirstPart = firstPart.PadRight(timeMachine.LongestFirstPartLength);
+                        Console.WriteLine($" {paddedFirstPart} = {equationPieces[4]}");
+                    } 
+                    else
+                    {
+                        string firstPart = $"{equationPieces[0]} {equationPieces[1]}";
+                        string paddedFirstPart = firstPart.PadRight(timeMachine.LongestFirstPartLength);
+                        Console.WriteLine($" {paddedFirstPart} = {equationPieces[3]}");
+                    }
                 }
             }
         }
