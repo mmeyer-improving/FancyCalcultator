@@ -47,6 +47,12 @@ namespace FancyCalculator
                 case "-":
                     Subtract(x, y);
                     break;
+                case "*":
+                    Multiply(x, y);
+                    break;
+                case "/":
+                    Divide(x, y);
+                    break;
                 default:
                     Console.WriteLine("Incorrect format.");
                     return;
@@ -78,6 +84,20 @@ namespace FancyCalculator
         static void Subtract(decimal x, decimal y)
         {
             var result = x - y;
+            Console.WriteLine($"Result: {result}");
+        }
+
+        //Multiplies the two decimals.
+        static void Multiply(decimal x, decimal y)
+        {
+            var result = x * y;
+            Console.WriteLine($"Result: {result}");
+        }
+
+        //Divides the two decimals.
+        static void Divide(decimal x, decimal y)
+        {
+            var result = x / y;
             Console.WriteLine($"Result: {result}");
         }
     }
