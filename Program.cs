@@ -13,6 +13,7 @@ namespace FancyCalculator
             string operand;
             decimal y;
             string input;
+            bool neededToUseHistory = false;
             
 
             Console.WriteLine("A Console Calculator");
@@ -63,6 +64,7 @@ namespace FancyCalculator
                     else if (inputPieces.Count == 2)
                     {
                         x = timeMachine.LastResult;
+                        neededToUseHistory = true;
 
                         operand = inputPieces.ElementAt(0);
 
@@ -87,16 +89,16 @@ namespace FancyCalculator
                     switch (operand)
                     {
                         case "+":
-                            Add(x, y, ref timeMachine, input);
+                            Add(x, y, ref timeMachine, input, neededToUseHistory);
                             break;
                         case "-":
-                            Subtract(x, y, ref timeMachine, input);
+                            Subtract(x, y, ref timeMachine, input, neededToUseHistory);
                             break;
                         case "*":
-                            Multiply(x, y, ref timeMachine, input);
+                            Multiply(x, y, ref timeMachine, input, neededToUseHistory);
                             break;
                         case "/":
-                            Divide(x, y, ref timeMachine, input);
+                            Divide(x, y, ref timeMachine, input, neededToUseHistory);
                             break;
                         default:
                             Console.WriteLine($"The operation '{operand}' is invalid. You must use one of the following: + - * /");
@@ -135,7 +137,7 @@ namespace FancyCalculator
                 {
                     foreach (var equation in timeMachine.History)
                     {
-                        var equationPieces = equation.Split(' ');
+                        var equationPieces = equation.EnteredEquation.Split(' ');
 
                         if (equationPieces.Length == 5 && equationPieces[1] == inputPieces[1])
                         {
@@ -145,7 +147,7 @@ namespace FancyCalculator
                         }
                         else if (equationPieces.Length == 4 && equationPieces[0] == inputPieces[1])
                         {
-                            string firstPart = $"{equationPieces[0]} {equationPieces[1]}";
+                            string firstPart = $"{equation.HiddenValue} {equationPieces[0]} {equationPieces[1]}";
                             string paddedFirstPart = firstPart.PadRight(timeMachine.LongestFirstPartLength);
                             Console.WriteLine($" {paddedFirstPart} = {equationPieces[3]}");
                         }
@@ -155,7 +157,7 @@ namespace FancyCalculator
                 {
                     foreach (var equation in timeMachine.History)
                     {
-                        var equationPieces = equation.Split(' ');
+                        var equationPieces = equation.EnteredEquation.Split(' ');
 
                         if (equationPieces.Length == 5)
                         {
@@ -181,34 +183,62 @@ namespace FancyCalculator
         }
         
         //Adds the two decimals together.
-        static void Add(decimal x, decimal y, ref TimeMachine timeMachine, string input)
+        static void Add(decimal x, decimal y, ref TimeMachine timeMachine, string input, bool neededToUseHistory)
         {
             var result = x + y;
+            if (neededToUseHistory)
+            {
+                timeMachine.AddHistory($"{input} = {result}", timeMachine.LastResult);
+            }
+            else
+            {
+                timeMachine.AddHistory($"{input} = {result}");
+
+            }
+
             timeMachine.LastResult = result;
-            timeMachine.AddHistory($"{input} = {result}");
             Console.WriteLine($"Result: {result}");
         }
 
         //Subtracts the two decimals.
-        static void Subtract(decimal x, decimal y, ref TimeMachine timeMachine, string input)
+        static void Subtract(decimal x, decimal y, ref TimeMachine timeMachine, string input, bool neededToUseHistory)
         {
             var result = x - y;
+            if (neededToUseHistory)
+            {
+                timeMachine.AddHistory($"{input} = {result}", timeMachine.LastResult);
+            }
+            else
+            {
+                timeMachine.AddHistory($"{input} = {result}");
+
+            }
+
             timeMachine.LastResult = result;
-            timeMachine.AddHistory($"{input} = {result}");
             Console.WriteLine($"Result: {result}");
         }
 
         //Multiplies the two decimals.
-        static void Multiply(decimal x, decimal y, ref TimeMachine timeMachine, string input)
+        static void Multiply(decimal x, decimal y, ref TimeMachine timeMachine, string input, bool neededToUseHistory)
         {
             var result = x * y;
+            
+            if (neededToUseHistory)
+            {
+                timeMachine.AddHistory($"{input} = {result}", timeMachine.LastResult);
+            } 
+            else
+            {
+                timeMachine.AddHistory($"{input} = {result}");
+
+            }
+
             timeMachine.LastResult = result;
-            timeMachine.AddHistory($"{input} = {result}");
             Console.WriteLine($"Result: {result}");
         }
 
         //Divides the two decimals.
-        static void Divide(decimal x, decimal y, ref TimeMachine timeMachine, string input)
+        static void Divide(decimal x, decimal y, ref TimeMachine timeMachine, string input, bool neededToUseHistory)
         {
             if (y == 0)
             {
@@ -216,8 +246,17 @@ namespace FancyCalculator
                 return;
             }
             var result = x / y;
+            if (neededToUseHistory)
+            {
+                timeMachine.AddHistory($"{input} = {result}", timeMachine.LastResult);
+            }
+            else
+            {
+                timeMachine.AddHistory($"{input} = {result}");
+
+            }
+
             timeMachine.LastResult = result;
-            timeMachine.AddHistory($"{input} = {result}");
             Console.WriteLine($"Result: {result}");
         }
     }
