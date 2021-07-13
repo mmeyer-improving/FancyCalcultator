@@ -253,7 +253,6 @@ namespace FancyCalculator
             else
             {
                 timeMachine.AddHistory($"{input} = {result}");
-
             }
 
             timeMachine.LastResult = result;
